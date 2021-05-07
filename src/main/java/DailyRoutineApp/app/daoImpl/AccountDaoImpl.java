@@ -40,6 +40,16 @@ public class AccountDaoImpl implements AccountDao{
 		jdbc.update(sql, ac.getAccountid(),ac.getPassword(),ac.getAccountname(),ac.isEnabled(),ac.isAdmin());
 	}
 
+	/*
+	 * 引数のアカウントIdが同じ数を集計する。
+	 */
+	@Override
+	public Integer acIdCheck(Account ac) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		int count = jdbc.queryForObject("SELECT COUNT(accountid) FROM account WHERE accountid = ?", Integer.class,ac.getAccountid());
+		return count;
+	}
+
 
 
 }

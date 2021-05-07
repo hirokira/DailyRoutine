@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import DailyRoutineApp.app.component.AccountComponent;
 import DailyRoutineApp.app.daoImpl.AccountDaoImpl;
 import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.service.AccountService;
@@ -28,6 +29,9 @@ public class AccountController {
 
 	@Autowired
 	private AccountService acService;
+
+	@Autowired
+	private AccountComponent acComponent;
 
 	@Autowired
 	private TestService sv;
@@ -78,16 +82,14 @@ public class AccountController {
 	@RequestMapping(value="/account/create",method=RequestMethod.POST)
 	public ModelAndView acCreate(@ModelAttribute("formModel")@Validated Account account,
 								BindingResult result,ModelAndView mav) {
-
 		ModelAndView res = null;
-
-		System.out.println(account);
-		//---バリデーションエラーがないときの処理
-		if(!result.hasErrors()) {
-			acService.insert(account);
-			session.setAttribute("msg", "登録が完了しました。");
-			res = new ModelAndView("redirect:/top");
-		}else {
+		System.out.println(impl.acIdCheck(account));
+		//---バリデーションエラーがない かつ アカウントIDが既に存在していない時 の処理
+		if(!result.hasErrors()&&acComponent.acIdCheck(account)) {
+			acService.insert(account);					//---インサート処理
+			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
+			res = new ModelAndView("redirect:/top");				//---リダイレクト
+		}else {											//---入力不備などがあった場合の処理
 			mav.setViewName("/account/acNew");
 			mav.addObject("formModel", account);
 			mav.addObject("result", result);

@@ -12,4 +12,6 @@ public interface AccountDao {
 
 	public void insert(Account ac) throws DataAccessException;
 
+	public Integer acIdCheck(Account ac) throws DataAccessException;
+
 }
