@@ -25,16 +25,17 @@ public class Account {
 
 
 	@Id
+	@NotEmpty(message="アカウントIDは必須項目です")
 	@Column(nullable=false,unique=true)
 	private String accountid;
 
 	@NotNull
-	@NotEmpty
+	@NotEmpty(message="パスワードは必須項目です")
 	@Column(nullable=false)
 	private String password;
 
 	@NotNull
-	@NotEmpty
+	@NotEmpty(message="アカウント名は必須項目です")
 	@Column(nullable=false)
 	private String accountname;
 

@@ -24,4 +24,11 @@ public class AccountService {
 		impl.insert(account);		//---アカウントを追加。
 	}
 
+	/*
+	 * 引数のアカウント情報取得
+	 */
+	public Account findById(String accountid) {
+		Account account = impl.findById(accountid);
+		return account;
+	}
 }

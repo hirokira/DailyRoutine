@@ -25,7 +25,7 @@
 				<td th:text="${list.accountid}" ></td>
 				<td th:text="${list.accountname}"></td>
 				<td th:text="${list.admin}"></td>
-				<td><a th:href="@{/account/show/{accountname}(accountname=${list.accountname})}">詳細確認</a></td>
+				<td><a th:href="@{/account/show/{accountid}(accountid=${list.accountid})}">詳細確認</a></td>
 			</tr>
 
 		</table>

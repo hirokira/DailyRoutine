@@ -8,14 +8,18 @@
 <body>
 
 	<h1>新規アカウント登録</h1>
+	<!--
 	<ul>
 		<li th:if="${msg!=null}" th:text="${msg}" />
+		<li th:if="${msg2!=null}" th:text="${msg2}" />
 	</ul>
-
+ -->
 	<div class="content">
 
 		<form th:action="@{/account/create}" method="post" th:object="${formModel}">
 			<ul>
+				<li th:if="${msg!=null}" th:text="${msg}" />
+				<li th:if="${msg2!=null}" th:text="${msg2}" />
 				<li th:each="error : ${#fields.detailedErrors()}" class = "err" th:text="${error.message}" />
 			</ul>
 			<table>

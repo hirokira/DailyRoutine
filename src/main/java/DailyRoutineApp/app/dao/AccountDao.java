@@ -14,4 +14,8 @@ public interface AccountDao {
 
 	public Integer acIdCheck(Account ac) throws DataAccessException;
 
+	public Integer acNameCheck(Account ac) throws DataAccessException;
+
+	public Account findById(String accountid) throws DataAccessException;
+
 }

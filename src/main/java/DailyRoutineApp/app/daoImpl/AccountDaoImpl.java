@@ -7,7 +7,9 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import DailyRoutineApp.app.dao.AccountDao;
@@ -49,6 +51,36 @@ public class AccountDaoImpl implements AccountDao{
 		int count = jdbc.queryForObject("SELECT COUNT(accountid) FROM account WHERE accountid = ?", Integer.class,ac.getAccountid());
 		return count;
 	}
+
+	/*
+	 * 引数のアカウント名が同じ数を集計する
+	 */
+	@Override
+	public Integer acNameCheck(Account ac) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		int count = jdbc.queryForObject("SELECT COUNT(accountname) FROM account WHERE accountname = ?", Integer.class, ac.getAccountname());
+		return count;
+	}
+
+	/*
+	 * 引数のアカウントIdのオブジェクトを取得する。
+	 */
+	@Override
+	public Account findById(String accountid) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		String sql = "SELECT * FROM account where accountid = ?";
+
+		RowMapper<Account> rowmapper = new BeanPropertyRowMapper<Account>(Account.class);
+
+		//SQL実行　jdbcTemplateのqueryメソッドを使ってDBから情報を取得。
+		Account account = jdbc.queryForObject(sql, rowmapper, accountid);
+		return account;
+//		Query query = em.createQuery("FROM ACCOUNT WHERE accountid = :accountid").setParameter("accountid", accountid);
+//		Account account = (Account) query.getSingleResult();
+//		return account;
+	}
+
+
 
 
 

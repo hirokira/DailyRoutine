@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -83,9 +84,8 @@ public class AccountController {
 	public ModelAndView acCreate(@ModelAttribute("formModel")@Validated Account account,
 								BindingResult result,ModelAndView mav) {
 		ModelAndView res = null;
-		System.out.println(impl.acIdCheck(account));
-		//---バリデーションエラーがない かつ アカウントIDが既に存在していない時 の処理
-		if(!result.hasErrors()&&acComponent.acIdCheck(account)) {
+		//---バリデーションエラーがない かつ 『アカウントID』、『アカウント名』が未登録時の処理
+		if(!result.hasErrors() && acComponent.acIdCheck(account) && acComponent.acNameCheck(account)) {
 			acService.insert(account);					//---インサート処理
 			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
 			res = new ModelAndView("redirect:/top");				//---リダイレクト
@@ -94,11 +94,22 @@ public class AccountController {
 			mav.addObject("formModel", account);
 			mav.addObject("result", result);
 			mav.addObject("msg", "入力内容に不備があります。");
+			mav.addObject("msg2", acComponent.acCheckMsg(account));		//---入力アカウントID、アカウント名が重複時のメッセージを追加ロジック
 			res = mav;
 		}
 		return res;
 	}
 
+	/*
+	 * アカウント情報詳細確認
+	 */
+	@RequestMapping(value="/account/show/{accountid}",method=RequestMethod.GET)
+	public ModelAndView acShow(@PathVariable("accountid")String accountid,ModelAndView mav) {
+		Account account = acService.findById(accountid);	//---アカウント情報取得
+		mav.addObject("formModel", account);
+		mav.setViewName("/account/acShow");
+		return mav;
+	}
 
 
 }
