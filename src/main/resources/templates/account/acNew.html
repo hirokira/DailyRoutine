@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>日課共有システム</title>
 </head>
 <body>
 
@@ -17,9 +17,8 @@
 	<div class="content">
 
 		<form th:action="@{/account/create}" method="post" th:object="${formModel}">
-			<ul>
-				<li th:if="${msg!=null}" th:text="${msg}" />
-				<li th:if="${msg2!=null}" th:text="${msg2}" />
+			<ul  style=color:red>
+				<li th:each="msgList : ${msgList}" class = "msg" th:text="${msgList}" />
 				<li th:each="error : ${#fields.detailedErrors()}" class = "err" th:text="${error.message}" />
 			</ul>
 			<table>
@@ -27,7 +26,7 @@
 					<td><input type="text" name="accountid" th:value="*{accountid}" />※ログイン時に使用します</td></tr>
 
 				<tr><td><label>パスワード</label></td>
-					<td><input type="text" name="password" th:value="*{password}" /></td></tr>
+					<td><input type="password" name="password" th:value="*{password}" /></td></tr>
 
 				<tr><td><label>アカウント表示名</label></td>
 					<td><input type="text" name="accountname" th:value="*{accountname}" />※アプリケーション内の表示名</td></tr>

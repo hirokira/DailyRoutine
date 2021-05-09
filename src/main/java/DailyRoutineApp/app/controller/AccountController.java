@@ -1,5 +1,6 @@
 package DailyRoutineApp.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import DailyRoutineApp.app.component.AccountComponent;
@@ -61,7 +63,6 @@ public class AccountController {
 	public ModelAndView acIndex(ModelAndView mav) {
 		mav.setViewName("/account/acIndex");
 		List<Account> list = impl.acAll();
-		System.out.println(list);
 		mav.addObject("list", list);
 		return mav;
 	}
@@ -84,17 +85,18 @@ public class AccountController {
 	public ModelAndView acCreate(@ModelAttribute("formModel")@Validated Account account,
 								BindingResult result,ModelAndView mav) {
 		ModelAndView res = null;
+		List<String> msgList = new ArrayList<String>();
 		//---バリデーションエラーがない かつ 『アカウントID』、『アカウント名』が未登録時の処理
 		if(!result.hasErrors() && acComponent.acIdCheck(account) && acComponent.acNameCheck(account)) {
-			acService.insert(account);					//---インサート処理
+			acService.insert(account);								//---インサート処理
 			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
 			res = new ModelAndView("redirect:/top");				//---リダイレクト
-		}else {											//---入力不備などがあった場合の処理
+		}else {														//---入力不備などがあった場合の処理
 			mav.setViewName("/account/acNew");
 			mav.addObject("formModel", account);
 			mav.addObject("result", result);
-			mav.addObject("msg", "入力内容に不備があります。");
-			mav.addObject("msg2", acComponent.acCheckMsg(account));		//---入力アカウントID、アカウント名が重複時のメッセージを追加ロジック
+			msgList = acComponent.acCheckMsg(account);				//---アカウントID、アカウント名が重複時のメッセージをリストに追加するメソッド
+			mav.addObject("msgList", msgList);
 			res = mav;
 		}
 		return res;
@@ -106,10 +108,65 @@ public class AccountController {
 	@RequestMapping(value="/account/show/{accountid}",method=RequestMethod.GET)
 	public ModelAndView acShow(@PathVariable("accountid")String accountid,ModelAndView mav) {
 		Account account = acService.findById(accountid);	//---アカウント情報取得
-		mav.addObject("formModel", account);
+		mav.addObject("formModel", account);				//---アカウント情報をViewへ送る
 		mav.setViewName("/account/acShow");
 		return mav;
 	}
+
+	/*
+	 * アカウント情報編集画面
+	 */
+	@RequestMapping(value="/account/edit",method=RequestMethod.POST)
+	public ModelAndView acEdit(@RequestParam("accountid")String accountid,ModelAndView mav) {
+		mav.setViewName("/account/acEdit");
+		Account account = acService.findById(accountid);	//---アカウント情報取得
+		mav.addObject("formModel", account);				//---アカウント情報をViewへ送る
+		return mav;
+	}
+
+	/*
+	 * アカウント情報編集
+	 */
+	@RequestMapping(value="/account/update",method=RequestMethod.POST)
+	public ModelAndView acUpdate(@ModelAttribute("formModel")@Validated Account account,
+								BindingResult result,@RequestParam("password_before")String pass,ModelAndView mav) {
+		ModelAndView res = null;
+		List<String> msgList = new ArrayList<String>();
+
+		//---バリデーションエラーがない かつ 『アカウント名』が未登録　または　フォーム入力アカウント名が未更新 かつ　
+		//---入力したパスワードとアカウントIDのパスワードが一致した時の処理
+		if(!result.hasErrors() && (acComponent.acNameCheck(account) || acComponent.acNameUpdateCheck(account))
+				&& acComponent.passwordCheck(account.getAccountid(), pass)) {
+			acService.update(account); 										//---アカウント情報更新処理
+			res = new ModelAndView("redirect:/top");							//---Viewをセット
+			session.setAttribute("msg", "アカウント情報の更新が完了しました。");//---セッションに完了メッセージ登録
+		}else {
+			mav.setViewName("/account/acEdit");								//---VIEWをセット
+			mav.addObject("formModel", account);							//---Modelを追加
+			mav.addObject("result", result);								//---バリデーション結果のエラーを設置
+			mav.addObject("msgList", acComponent.acUpdateCheckMsg(account,account.getAccountid(),pass));
+			res = mav;
+		}
+		return res;
+	}
+
+	/*
+	 * アカウント情報削除
+	 */
+	@RequestMapping(value="/account/delete",method=RequestMethod.POST)
+	public ModelAndView acDelete(@RequestParam("accountid")String acId,ModelAndView mav) {
+		ModelAndView res = null;
+		if(acService.acCount(acService.findById(acId))!=0) {		//---リクエストで受取ったaccountidのレコードが0行以外なら削除実行
+			acService.delete(acId);									//---引数のアカウントIDの行を削除する。
+			res = new ModelAndView("redirect:/account/index");		//---アカウント一覧画面へリダイレクト
+		}else {
+			mav.setViewName("error");								//---リクエストで受取ったaccountidのレコードが0行の場合、エラー画面へ遷移
+			res = mav;
+		}
+		return res;
+	}
+
+
 
 
 }

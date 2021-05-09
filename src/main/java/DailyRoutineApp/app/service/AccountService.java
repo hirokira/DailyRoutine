@@ -31,4 +31,28 @@ public class AccountService {
 		Account account = impl.findById(accountid);
 		return account;
 	}
+
+	/*
+	 * アカウント更新
+	 */
+	@Transactional
+	public void update(Account ac) {
+		impl.update(ac);
+	}
+
+	/*
+	 * アカウント削除
+	 */
+	@Transactional
+	public void delete(String accountid) {
+		impl.delete(accountid);
+	}
+
+	/*
+	 * 指定したアカウントIDの数を取得
+	 */
+	public Integer acCount(Account ac) {
+		Integer count =impl.acIdCheck(ac);
+		return count;
+	}
 }
