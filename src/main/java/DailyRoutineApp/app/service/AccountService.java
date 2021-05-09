@@ -1,5 +1,7 @@
 package DailyRoutineApp.app.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,13 @@ public class AccountService {
 	@Autowired
 	private AccountDaoImpl impl;
 
-
+	/*
+	 * アカウント一覧取得
+	 */
+	public List<Account> acAll(){
+		List<Account> acList = impl.acAll();
+		return acList;
+	}
 	/*
 	 * アカウント新規登録
 	 */

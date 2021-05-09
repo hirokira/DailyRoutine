@@ -6,6 +6,11 @@
 <title>日課共有アプリケーション</title>
 </head>
 <body>
+
+	<div th:fragment="header" class="header" style=background:gray>
+		<h2><a th:href="@{/account/index}" th:text="日課共有アプリケーション"></a></h2>
+		<span th:text="|ログインユーザー：ゲストさん|" style=color:white></span>
+	</div>
 	<div id = "content">
 		<h1>アカウント一覧</h1>
 		<!-- Loginページからのみの新規アカウント作成とするため、削除--2021/04/02 Add

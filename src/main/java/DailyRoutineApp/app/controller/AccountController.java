@@ -62,7 +62,7 @@ public class AccountController {
 	@RequestMapping(value="/account/index",method = RequestMethod.GET)
 	public ModelAndView acIndex(ModelAndView mav) {
 		mav.setViewName("/account/acIndex");
-		List<Account> list = impl.acAll();
+		List<Account> list = acService.acAll();
 		mav.addObject("list", list);
 		return mav;
 	}

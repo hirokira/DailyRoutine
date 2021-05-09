@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import DailyRoutineApp.app.dao.AccountDao;
@@ -64,14 +65,14 @@ public class AccountDaoImpl implements AccountDao{
 	@Override
 	public Account findById(String accountid) throws DataAccessException {
 		// TODO 自動生成されたメソッド・スタブ
-//		String sql = "SELECT * FROM account where accountid = ?";
-//		RowMapper<Account> rowmapper = new BeanPropertyRowMapper<Account>(Account.class);
-//		//SQL実行　jdbcTemplateのqueryメソッドを使ってDBから情報を取得。
-//		Account account = jdbc.queryForObject(sql, rowmapper, accountid);
+		String sql = "SELECT * FROM account where accountid = ?";
+		RowMapper<Account> rowmapper = new BeanPropertyRowMapper<Account>(Account.class);
+		//SQL実行　jdbcTemplateのqueryメソッドを使ってDBから情報を取得。
+		Account account = jdbc.queryForObject(sql, rowmapper, accountid);
 
-		String qstr = "from Account where accountid = :fstr";
-		Query query = em.createQuery(qstr).setParameter("fstr", accountid);
-		Account account = (Account) query.getSingleResult();
+//		String qstr = "from Account where accountid = :fstr";
+//		Query query = em.createQuery(qstr).setParameter("fstr", accountid);
+//		Account account = (Account) query.getSingleResult();
 		return account;
 	}
 
