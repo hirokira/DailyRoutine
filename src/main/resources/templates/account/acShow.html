@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- thymeleafを使うため以下を記述する。以後はth:xxxとすればthymeleafのメソッドが使用可能。 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>日課共有システム</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+	<header class="header" th:insert="account/acIndex :: header"></header>
+
+<section class="bg-light text-center py-5 container">
+		<h2 class="text-white py-3" style=background:gray>アカウント情報詳細</h2>
+		<!-- <div><a th:href="@{/user/index}" href="{/user/index}">アカウント一覧へ戻る</a></div> -->
+	<div>
+		<table class="table table-striped table-bordered text-lg" th:object = "${formModel}">
+			<tr><td th:text="|アカウントID:${formModel.accountid}|"></td></tr>
+			<tr><td th:text="|アカウント表示名：${formModel.accountname}|"></td></tr>
+			<tr><td th:text="|管理者権限：${formModel.admin}|" ></td></tr>
+			<!-- <tr><td th:if="${formModel.admin}==0" th:text="権限(ROLE)：USER"></td></tr> -->
+		</table>
+
+	</div>
+	<div class="py-5">
+		<form th:action="@{/account/edit}" method="post">
+				<input type="hidden" name="accountid" th:value="*{accountid}" />
+				<input type="submit" value="編集する" class="col-sm-1.5 btn-primary btn"/>
+		</form>
+
+	</div>
+
+
+	<div>
+		<form th:action="@{/account/delete}" method="post" >
+			<input type="hidden" name="accountid" th:value="*{accountid}" />
+			<div th:if="${formModel.admin==false}">
+				<input type="submit" th:value="|アカウントID：${formModel.accountid}を削除する|" class="col-sm-4 btn-danger btn"/>
+			</div>
+		</form>
+	</div>
+</section>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

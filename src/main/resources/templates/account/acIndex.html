@@ -4,37 +4,86 @@
 <head>
 <meta charset="UTF-8">
 <title>日課共有アプリケーション</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+      .cover {
+
+        background: url(img/bg.png);
+
+        background-size: cover;
+
+      }
+
+    </style>
 </head>
 <body>
+	<header th:fragment="header">
+		<div th:if=${msg!=null} class="alert alert-info text-center mb-0 rounded-0 alert-dismissible fade show">
+			<span th:text="${msg}"></span>
+			<button class="close" data-dismiss="alert">
+			  &times;
+			</button>
+		</div>
+		<div class="bg-dark py-3">
+		  <nav class="navbar navbar-expand-sm navbar-light">
+			<h2><a th:href="@{/top}" th:text="TOPページ" class="navbar-brand  text-light"></a></h2>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#menu">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			<div id="menu" class="collapse navbar-collapse">
+			  <ul class="navbar-nav">
+			    <li class="nav-item"><span th:text="|ログインユーザー：ゲストさん|" class="nav-link  text-light pr-5"></span></li>
+			    <li class="nav-item"><a th:href="@{/account/new}" th:text="新規アカウント追加" class="nav-link  text-light pr-5">Link</a></li>
+			    <li class="nav-item "><a href=""  th:text="ログアウト" class="nav-link text-light ">Link</a></li>
+			  </ul>
+			</div>
+		  </nav>
 
+		</div>
+
+		<!--  -->
+		<div class="cover text-dark text-center py-2">
+			<h1><a th:href="@{/account/index}" th:text="DailyRoutineAPP" class="display-4 mb-4 text-dark text-decoration-none"></a></h1>
+			<!-- <a href="" class="btn btn-primary btn-lg">Get It Now!</a> -->
+		</div>
+	</header>
+<!--
 	<div th:fragment="header" class="header" style=background:gray>
 		<h2><a th:href="@{/account/index}" th:text="日課共有アプリケーション"></a></h2>
 		<span th:text="|ログインユーザー：ゲストさん|" style=color:white></span>
 	</div>
-	<div id = "content">
-		<h1>アカウント一覧</h1>
-		<!-- Loginページからのみの新規アカウント作成とするため、削除--2021/04/02 Add
-			<div class="content_new"><a th:href="@{/user/new}" href="{/user/new}">新規アカウント作成</a></div>
-		 -->
-		<div th:text="${msg}"></div>
+ -->
+<section class="bg-light text-center py-5">
+	<h2 class="text-white py-3" style=background:gray>アカウント一覧</h2>
 
-		<table class="content_index">
-			<tr class="content_th">
-				<th>アカウントID</th>
-				<th>アカウント名</th>
-				<th>権限(ADMIN)</th>
-				<th>詳細を見る</th>
-			</tr>
+	<div class="container">
+		<table class="table table-hover table-bordered">
+			<thead class="thead-light">
+				<tr>
+					<th>アカウントID</th>
+					<th>アカウント表示名</th>
+					<th>権限(ADMIN)</th>
+					<th>詳細を見る</th>
+				</tr>
+			</thead>
 
 			<tr th:each="list : ${list}" class="content_tr">
 				<td th:text="${list.accountid}" ></td>
 				<td th:text="${list.accountname}"></td>
 				<td th:text="${list.admin}"></td>
-				<td><a th:href="@{/account/show/{accountid}(accountid=${list.accountid})}">詳細確認</a></td>
+				<td><a th:href="@{/account/show/{accountid}(accountid=${list.accountid})}" class="btn btn-primary btn-sm">詳細確認</a></td>
 			</tr>
-
 		</table>
 
 	</div>
+</section>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
 </html>

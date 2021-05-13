@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.sun.istack.NotNull;
 
 import lombok.Data;
@@ -26,6 +28,7 @@ public class Account {
 
 	@Id
 	@NotEmpty(message="アカウントIDは必須項目です")
+	@Length(min=4,max=10,message="アカウントIDは4文字以上10文字未満です。")
 	@Column(nullable=false,unique=true)
 	private String accountid;
 
@@ -36,6 +39,7 @@ public class Account {
 
 	@NotNull
 	@NotEmpty(message="アカウント名は必須項目です")
+	@Length(min=1,max=20,message="アカウント名は1文字以上20文字未満です。")
 	@Column(nullable=false)
 	private String accountname;
 

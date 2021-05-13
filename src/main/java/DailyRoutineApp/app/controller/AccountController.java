@@ -64,6 +64,10 @@ public class AccountController {
 		mav.setViewName("/account/acIndex");
 		List<Account> list = acService.acAll();
 		mav.addObject("list", list);
+		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
+			mav.addObject("msg", session.getAttribute("msg"));
+			session.removeAttribute("msg");						//---msgのセッション削除
+		}
 		return mav;
 	}
 
@@ -158,6 +162,7 @@ public class AccountController {
 		ModelAndView res = null;
 		if(acService.acCount(acService.findById(acId))!=0) {		//---リクエストで受取ったaccountidのレコードが0行以外なら削除実行
 			acService.delete(acId);									//---引数のアカウントIDの行を削除する。
+			session.setAttribute("msg", "削除が完了しました。");	//---セッションに完了メッセージ登録
 			res = new ModelAndView("redirect:/account/index");		//---アカウント一覧画面へリダイレクト
 		}else {
 			mav.setViewName("error");								//---リクエストで受取ったaccountidのレコードが0行の場合、エラー画面へ遷移
