@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
+
+import com.sun.istack.NotNull;
 
 import lombok.Data;
 
@@ -18,6 +21,8 @@ public class Routine_Detail {
 	@Column(nullable=false)
 	private Integer r_Detailid;
 
+	@NotNull
+	@NotEmpty(message="CONTENTは必須項目です")
 	@Column(nullable=false)
 	private String content;
 

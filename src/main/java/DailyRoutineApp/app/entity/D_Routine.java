@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
+
+import com.sun.istack.NotNull;
 
 import lombok.Data;
 
@@ -28,6 +31,8 @@ public class D_Routine {
 	@Column(nullable=false)
 	private Integer routineid;
 
+	@NotNull
+	@NotEmpty(message="Content Titleは必須項目です")
 	@Column(nullable=false)
 	private String title;
 
