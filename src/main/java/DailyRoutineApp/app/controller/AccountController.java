@@ -94,7 +94,7 @@ public class AccountController {
 		if(!result.hasErrors() && acComponent.acIdCheck(account) && acComponent.acNameCheck(account)) {
 			acService.insert(account);								//---インサート処理
 			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
-			res = new ModelAndView("redirect:/top");				//---リダイレクト
+			res = new ModelAndView("redirect:/account/index");				//---リダイレクト
 		}else {														//---入力不備などがあった場合の処理
 			mav.setViewName("/account/acNew");
 			mav.addObject("formModel", account);
