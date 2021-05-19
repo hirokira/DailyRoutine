@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- thymeleafを使うため以下を記述する。以後はth:xxxとすればthymeleafのメソッドが使用可能。 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>日課共有システム</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+	<header class="header" th:insert="account/acIndex :: header"></header>
+
+<section class="bg-light  py-5 container">
+		<h2 class="text-white py-3 text-center" style=background:gray>Routine Details</h2>
+		<!-- <div><a th:href="@{/user/index}" href="{/user/index}">アカウント一覧へ戻る</a></div> -->
+	<div th:object = "${formModel}">
+		<h3 th:text="|タイトル：${formModel.title}"></h3>
+		<h3 th:text="|作成者：${formModel.account.accountname}|"></h3>
+		<table class="table table-white text-lg" >
+			<tr>
+				<td  class="col-sm-3 col-form-label text-danger text-right" th:text="|♥の数：${formModel.nicepnt}|"></td>
+			</tr>
+			<!-- <tr><td th:if="${formModel.admin}==0" th:text="権限(ROLE)：USER"></td></tr> -->
+		</table>
+	</div>
+		<table class="table table-hover table-bordered text-center">
+			<thead class="thead-light">
+				<tr>
+					<th>CONTENTS</th>
+					<th>完了日数</th>
+					<th>完了/未完了</th>
+					<th>内容を編集する</th>
+				</tr>
+			</thead>
+
+			<tr th:each="detailList : ${detailList}" class="content_tr">
+				<td th:text="${detailList.content}" ></td>
+				<td th:text="${detailList.success_cnt}" ></td>
+
+				<td th:object="${formModel}">
+					<form th:action="@{/routine/show}" method=post>
+						<input type="hidden" name="routineid" th:value="${formModel.routineid}" /><!-- 5/19追加 -->
+						<input type="hidden" name="r_Detailid" th:value="${detailList.r_Detailid}" /><!-- 5/19追加 -->
+						<input type="hidden" name="complate_flg" th:value="${detailList.isComplate_flg}" /><!-- 5/19追加 -->
+
+						<span th:if="${detailList.isComplate_flg==false}" >
+							<input type="submit" value="完了！" class="btn btn-outline-primary btn-sm" />
+						</span>
+						<span th:unless="${detailList.isComplate_flg==false}" >
+							<input type="submit" value="未完了" class="btn btn-outline-danger btn-sm" />
+						</span>
+
+					</form>
+				</td>
+
+				<!-- <td th:text="${detailList.isComplate_flg}" ></td> -->
+				<td>
+					<form th:action="@{/content/edit}" method=post>
+						<input type="hidden" name="r_Detailid" th:value="${detailList.r_Detailid}" />
+						<input type="submit" value="編集する" class="btn btn-outline-info btn-sm" />
+					</form>
+				</td>
+			</tr>
+		</table>
+
+</section>
+
+<section class="bg-white text-center py-3 container">
+
+	<form th:action="@{/content/new}" method=post>
+		<input type="hidden" name="routineid" th:value="${formModel.routineid}" />
+		<input type="submit" value="内容を追加する"  class="btn btn-outline-primary btn-lg"/>
+	</form>
+</section>
+
+<section class="bg-white text-center py-3 container">
+
+	<form th:action="@{/routine/index}" method=post>
+		<input type="hidden" name="routineid" th:value="${formModel.routineid}" />
+		<input type="submit" value="♥イイネ！"  class="btn btn-outline-danger btn-lg"/>
+	</form>
+</section>
+
+<section class="bg-white text-center py-3 container">
+
+	<form th:action="@{/routine/delete}" method=post>
+		<input type="hidden" name="routineid" th:value="${formModel.routineid}" />
+		<input type="submit" value="このRoutineを削除する"  class="btn btn-danger btn-lg"/>
+	</form>
+</section>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

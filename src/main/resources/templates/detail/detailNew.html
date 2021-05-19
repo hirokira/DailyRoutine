@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- thymeleafを使うため以下を記述する。以後はth:xxxとすればthymeleafのメソッドが使用可能。 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>日課共有システム</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+	<header class="header" th:insert="account/acIndex :: header"></header>
+
+
+<section class="bg-light text-center py-5 container">
+
+	<h2 class="text-white py-3" style=background:gray>RoutineDetail Create</h2>
+	<div class="content">
+
+		<form th:action="@{/content/create}" method="post" th:object="${formModel}" class="py-1">
+			<ul  style=color:red class="text-left">
+				<li th:each="msgList : ${msgList}" class = "msg" th:text="${msgList}" />
+				<li th:each="error : ${#fields.detailedErrors()}" class = "err" th:text="${error.message}" />
+			</ul>
+			<div class="form-group row">
+				<label class="col-sm-3 col-form-label font-weight-bold">Routine Content：</label>
+
+    			<div class="col-sm-6">
+					<input type="text" name="content" th:value="*{content}" class="form-control"/>
+				</div>
+			</div>
+
+			<input type="hidden" name="success_cnt" th:value=0 />
+			<input type="hidden" name="d_routineid" th:value="*{d_routine.routineid}" />
+			<input type="hidden" name="complate_flg" th:value=false />
+
+			<div class="form-group row">
+				<label class="col-sm-5 col-form-label"></label>
+					<input type="submit" value="登録" class="col-sm-1 btn-success btn"/>
+			</div>
+		</form>
+
+	</div>
+</section>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

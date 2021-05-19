@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- thymeleafを使うため以下を記述する。以後はth:xxxとすればthymeleafのメソッドが使用可能。 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<title>日課共有システム</title>
+</head>
+<body>
+	<div class="header" th:insert="account/acIndex :: header"></div>
+
+
+<section class="bg-light text-center py-5 container">
+	<h2 class="text-white py-3" style=background:gray>RoutineContents修正</h2>
+
+	<div class="content" th:object="${formModel}">
+
+		<form th:action="@{/content/update}" method="post">
+			<ul style=color:red class="text-left">
+				<li th:each="msgList : ${msgList}" class = "msg" th:text="${msgList}" />
+				<li th:each="error : ${#fields.detailedErrors()}" class = "err" th:text="${error.message}" />
+			</ul>
+			<table>
+
+			<div class="form-group row">
+				<label class="col-sm-3 col-form-label font-weight-bold text-right">Routine Content：</label>
+				<div class="col-sm-6">
+					<input type="text" name="content" th:value="*{content}" class="form-control"/>
+				</div>
+			<input type = "hidden" name="r_Detailid" th:value="*{r_Detailid}" />
+			<input type = "hidden" name="success_cnt" th:value="*{success_cnt}" />
+			<input type = "hidden" name="d_routineid" th:value="*{d_routine.routineid}" />
+			<input type = "hidden" name="complate_flg" th:value="*{isComplate_flg}" />
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-5 col-form-label"></label>
+					<input type="submit" value="更新" class="col-sm-1 btn-outline-primary btn"/>
+			</div>
+			</table>
+		</form>
+			<form th:action="@{/content/delete}" method="post" class="py-4">
+				<div class="form-group row">
+					<label class="col-sm-5 col-form-label"></label>
+					<input type="submit" value="削除する" class="col-sm-1 btn-danger btn"/>
+				</div>
+				<input type="hidden" name="r_Detailid" th:value="*{r_Detailid}" />
+			</form>
+	</div>
+</section>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

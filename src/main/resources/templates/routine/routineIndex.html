@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- thymeleafを使うため以下を記述する。以後はth:xxxとすればthymeleafのメソッドが使用可能。 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>日課共有アプリケーション</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+      .cover {
+
+        background: url(img/bg.png);
+
+        background-size: cover;
+
+      }
+
+    </style>
+</head>
+<body>
+	<header class="header" th:insert="account/acIndex :: header"></header>
+<!--
+	<div th:fragment="header" class="header" style=background:gray>
+		<h2><a th:href="@{/account/index}" th:text="日課共有アプリケーション"></a></h2>
+		<span th:text="|ログインユーザー：ゲストさん|" style=color:white></span>
+	</div>
+ -->
+<section class="bg-light text-center py-5">
+	<h2 class="text-white py-3" style=background:gray>Routine一覧</h2>
+
+	<div class="container">
+		<table class="table table-hover table-bordered">
+			<thead class="thead-light">
+				<tr>
+					<th>ID</th>
+					<th>RoutineTitle</th>
+					<th>作成者</th>
+					<th>イイネ数</th>
+					<th>詳細を見てみる</th>
+				</tr>
+			</thead>
+
+			<tr th:each="list : ${list}" class="content_tr">
+				<td th:text="${list.routineid}" ></td>
+				<td th:text="${list.title}" ></td>
+				<td th:text="${list.account.accountname}"></td>
+				<td th:text="${list.nicepnt}"></td>
+				<td><a th:href="@{/routine/show/{routineid}(routineid=${list.routineid})}" class="btn btn-primary btn-sm">内容確認</a></td>
+				<td>
+					<form th:action="@{/routine/index}" method=post>
+						<input type="hidden" name="routineid" th:value="${list.routineid}" />
+						<input type="submit" value=" ♥イイネ！"  class="btn btn-outline-danger btn-sm"/>
+					</form>
+					<!--
+				<a th:href="@{/routine/show/{routineid}(routineid=${list.routineid})}" class="btn btn-outline-danger btn-sm">♡イイネ！</a> -->
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</section>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
