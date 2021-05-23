@@ -45,10 +45,10 @@
 						<input type="hidden" name="complate_flg" th:value="${detailList.isComplate_flg}" /><!-- 5/19追加 -->
 
 						<span th:if="${detailList.isComplate_flg==false}" >
-							<input type="submit" value="完了！" class="btn btn-outline-primary btn-sm" />
+							<input type="submit" value="完了！" class="btn btn-outline-primary btn" />
 						</span>
 						<span th:unless="${detailList.isComplate_flg==false}" >
-							<input type="submit" value="未完了" class="btn btn-outline-danger btn-sm" />
+							<input type="submit" value="未完了に戻す" class="btn btn-outline-danger" />
 						</span>
 
 					</form>
@@ -58,7 +58,7 @@
 				<td>
 					<form th:action="@{/content/edit}" method=post>
 						<input type="hidden" name="r_Detailid" th:value="${detailList.r_Detailid}" />
-						<input type="submit" value="編集する" class="btn btn-outline-info btn-sm" />
+						<input type="submit" value="編集する" class="btn btn-outline-info" />
 					</form>
 				</td>
 			</tr>

@@ -75,6 +75,13 @@ public class RoutineDetailDaoImpl implements RoutineDetailDao{
 		jdbc.update(sql, routineid);
 	}
 
+	@Override
+	public void complate_flgInitial() throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		String sql = "UPDATE ROUTINE_DETAIL SET complate_flg = ?";
+		jdbc.update(sql, false);
+	}
+
 
 
 

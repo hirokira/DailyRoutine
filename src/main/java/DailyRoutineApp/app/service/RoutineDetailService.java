@@ -62,7 +62,12 @@ public class RoutineDetailService {
 		impl.deleteByRoutineId(routineId);
 	}
 
+
 	/*
-	 * 指定したルーティンタイトルIDと一致するルーティン詳細を取得
+	 * Complate_flgを初期化(false)する
 	 */
+	@Transactional
+	public void complate_flgInitial() {
+		impl.complate_flgInitial();
+	}
 }

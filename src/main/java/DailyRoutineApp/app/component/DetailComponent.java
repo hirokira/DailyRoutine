@@ -6,12 +6,16 @@ import org.springframework.stereotype.Component;
 
 import DailyRoutineApp.app.daoImpl.RoutineDetailDaoImpl;
 import DailyRoutineApp.app.entity.Routine_Detail;
+import DailyRoutineApp.app.service.RoutineDetailService;
 
 @Component
 public class DetailComponent {
 
 	@Autowired
 	private RoutineDetailDaoImpl detailImpl;
+
+	@Autowired
+	private RoutineDetailService service;
 
 
 	/*
@@ -35,9 +39,9 @@ public class DetailComponent {
 	 * スケジューリング機能実装
 	 * 　毎日０時０分０秒に、全てのComplate_flgを "false" に変更する。
 	 */
-	@Scheduled(cron = "40 * * * * *",zone="Asia/Tokyo")
-	public void doa() {
-		System.out.println("-----ひろみのうんこはくっさいのー♪-----");
+	@Scheduled(cron = "0 0 0 * * *",zone="Asia/Tokyo")
+	public void complate_flgInitial() {
+		service.complate_flgInitial();
 	}
 
 }

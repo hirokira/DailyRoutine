@@ -26,5 +26,8 @@ public interface RoutineDetailDao {
 	//---ルーティンタイトルIDが一致するルーティン詳細削除処理
 	public void deleteByRoutineId(Integer routineid)throws DataAccessException;
 
+	//---Complate_flgを初期化する(false)
+	public void complate_flgInitial()throws DataAccessException;
+
 
 }
