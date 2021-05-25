@@ -25,16 +25,16 @@ public class D_RoutineDaoImpl implements D_RoutineDao{
 	@Override
 	public void insert(D_Routine routine) throws DataAccessException {
 		// TODO 自動生成されたメソッド・スタブ
-		String sql = "INSERT INTO D_routine(title,nicepnt,account_accountid) Values(?,?,?)";
+		String sql = "INSERT INTO D_routine(title,nicepnt,account_accountid,description,currenttime) Values(?,?,?,?,CURRENT_TIMESTAMP())";
 
-		jdbc.update(sql, routine.getTitle(),routine.getNicepnt(),routine.getAccount().getAccountid());
+		jdbc.update(sql, routine.getTitle(),routine.getNicepnt(),routine.getAccount().getAccountid(),routine.getDescription());
 	}
 
 	@Override
 	public void update(D_Routine routine) throws DataAccessException {
 		// TODO 自動生成されたメソッド・スタブ
-		String sql = "UPDATE D_routine SET title=?,nicepnt=?,account_accountid=? WHERE routineid = ?";
-		jdbc.update(sql, routine.getTitle(),routine.getNicepnt(),routine.getAccount().getAccountid(),routine.getRoutineid());
+		String sql = "UPDATE D_routine SET title=?,nicepnt=?,account_accountid=? ,description=?,currenttime=? WHERE routineid = ?";
+		jdbc.update(sql, routine.getTitle(),routine.getNicepnt(),routine.getAccount().getAccountid(),routine.getDescription(),routine.getCurrenttime(),routine.getRoutineid());
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class D_RoutineDaoImpl implements D_RoutineDao{
 	@Override
 	public List<D_Routine> findAll() throws DataAccessException {
 		// TODO 自動生成されたメソッド・スタブ
-		List<D_Routine> list = em.createQuery("from D_Routine order by routineid", D_Routine.class).getResultList();
+		List<D_Routine> list = em.createQuery("from D_Routine order by currenttime DESC", D_Routine.class).getResultList();
 		return list;
 	}
 

@@ -13,10 +13,10 @@
 
 <section class="bg-light  py-5 container">
 		<h2 class="text-white py-3 text-center" style=background:gray>Routine Details</h2>
-		<!-- <div><a th:href="@{/user/index}" href="{/user/index}">アカウント一覧へ戻る</a></div> -->
 	<div th:object = "${formModel}">
-		<h3 th:text="|タイトル：${formModel.title}"></h3>
-		<h3 th:text="|作成者：${formModel.account.accountname}|"></h3>
+		<h3 th:text="|タイトル：${formModel.title}" class="border-bottom"></h3>
+		<h3 th:text="|作成者：${formModel.account.accountname}|" class="text-right"></h3>
+		<h4 th:text="|内容説明：${formModel.description}|" class="text-muted border-top pt-2"></h4>
 		<table class="table table-white text-lg" >
 			<tr>
 				<td  class="col-sm-3 col-form-label text-danger text-right" th:text="|♥の数：${formModel.nicepnt}|"></td>

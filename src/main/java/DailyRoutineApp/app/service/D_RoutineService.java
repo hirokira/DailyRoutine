@@ -1,5 +1,6 @@
 package DailyRoutineApp.app.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,12 @@ public class D_RoutineService {
 
 	/*
 	 * ルーティンタイトルのアップデート処理
+	 * 		アップデートした際、同時にcurrenttimeを現在日時に更新する
 	 */
 	@Transactional
 	public void update(D_Routine routine) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());     // 現在の日時を取得
+		routine.setCurrenttime(timestamp);
 		impl.update(routine);
 	}
 

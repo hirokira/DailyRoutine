@@ -1,7 +1,5 @@
 package DailyRoutineApp.app.entity;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,19 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.validator.constraints.Length;
-
 import com.sun.istack.NotNull;
 
 import lombok.Data;
 
 @Entity
 @Data
-public class D_Routine {
+public class D_Routine2 {
 
-	public D_Routine() {}
+	public D_Routine2() {}
 
-	public D_Routine(Account account,String title,Integer NicePnt) {
+	public D_Routine2(Account account,String title,Integer NicePnt) {
 		setRoutineid(0);
 		setTitle(title);
 		setNicepnt(NicePnt);
@@ -39,14 +35,6 @@ public class D_Routine {
 	@NotEmpty(message="Content Titleは必須項目です")
 	@Column(nullable=false)
 	private String title;
-
-	@Column
-	@Length(max=50,message="Content Descriptionは50文字未満です。")
-	private String description;
-
-	@Column(nullable = false)
-	private Timestamp currenttime;
-
 
 	@Column(nullable=false)
 	private Integer nicepnt;

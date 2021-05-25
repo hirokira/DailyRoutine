@@ -48,7 +48,7 @@ public class RoutineController {
 	/*
 	 * Routine一覧表示
 	 */
-	@RequestMapping(value="/routine/index",method=RequestMethod.GET)
+	@RequestMapping(value="/routine/index2",method=RequestMethod.GET)
 	public ModelAndView routineIndex(ModelAndView mav) {
 		List<D_Routine> list = d_service.findAll();
 		mav.addObject("list", list);
@@ -61,9 +61,40 @@ public class RoutineController {
 	}
 
 	/*
-	 * イイネ押下時の処理(Routine一覧表示)
+	 * Routine一覧表示(カード)
+	 */
+	@RequestMapping(value="/routine/index",method=RequestMethod.GET)
+	public ModelAndView card(ModelAndView mav) {
+		mav.setViewName("card");
+		List<D_Routine> list = d_service.findAll();
+		mav.addObject("list", list);
+		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
+			mav.addObject("msg", session.getAttribute("msg"));
+			session.removeAttribute("msg");						//---msgのセッション削除
+		}
+		return mav;
+	}
+
+
+	/*
+	 * イイネ押下時の処理(カードでRoutine一覧表示)
 	 */
 	@RequestMapping(value="/routine/index",method=RequestMethod.POST)
+	public ModelAndView routineIndexCardPost(@RequestParam("routineid")Integer id,ModelAndView mav) {
+		D_Routine routine = d_service.findById(id);
+		routine.setNicepnt(component.nicePntAdd(routine));
+		d_service.update(routine);
+		List<D_Routine> list = d_service.findAll();
+		mav.addObject("list", list);
+		mav.addObject("msg", "いいね！ しました。");
+		mav.setViewName("card");
+		return mav;
+	}
+
+	/*
+	 * イイネ押下時の処理(Routine一覧表示)
+	 */
+	@RequestMapping(value="/routine/index2",method=RequestMethod.POST)
 	public ModelAndView routineIndexPost(@RequestParam("routineid")Integer id,ModelAndView mav) {
 		D_Routine routine = d_service.findById(id);
 		routine.setNicepnt(component.nicePntAdd(routine));
@@ -92,6 +123,7 @@ public class RoutineController {
 	@RequestMapping(value="/routine/create",method=RequestMethod.POST)
 	public ModelAndView routineCreate(@ModelAttribute("formModel")@Validated D_Routine routine,
 			BindingResult result,ModelAndView mav) {
+		System.out.println(routine);
 		if(!result.hasErrors()) {
 			Account account = acService.findById("admin");
 			routine.setAccount(account);

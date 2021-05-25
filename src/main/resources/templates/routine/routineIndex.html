@@ -46,7 +46,7 @@
 				<td th:text="${list.title}" ></td>
 				<td th:text="${list.account.accountname}"></td>
 				<td th:text="${list.nicepnt}"></td>
-				<td><a th:href="@{/routine/show/{routineid}(routineid=${list.routineid})}" class="btn btn-primary btn-sm">内容確認</a></td>
+				<td><a th:href="@{/routine/show/{routineid}(routineid=${list.routineid})}" class="btn btn-primary btn-sm" th:text="詳細内容"></a></td>
 				<td>
 					<form th:action="@{/routine/index}" method=post>
 						<input type="hidden" name="routineid" th:value="${list.routineid}" />
