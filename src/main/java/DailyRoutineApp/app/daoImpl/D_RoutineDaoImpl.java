@@ -56,7 +56,7 @@ public class D_RoutineDaoImpl implements D_RoutineDao{
 	@Override
 	public List<D_Routine> findAll() throws DataAccessException {
 		// TODO 自動生成されたメソッド・スタブ
-		List<D_Routine> list = em.createQuery("from D_Routine order by currenttime DESC", D_Routine.class).getResultList();
+		List<D_Routine> list = em.createQuery("from D_Routine order by currenttime DESC, routineid", D_Routine.class).getResultList();
 		return list;
 	}
 

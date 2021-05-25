@@ -35,8 +35,7 @@ public class D_RoutineService {
 	 */
 	@Transactional
 	public void update(D_Routine routine) {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());     // 現在の日時を取得
-		routine.setCurrenttime(timestamp);
+		routine.setCurrenttime(new Timestamp(System.currentTimeMillis()));     // 現在の日時を取得
 		impl.update(routine);
 	}
 
