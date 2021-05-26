@@ -33,10 +33,19 @@ public class AccountService {
 	}
 
 	/*
-	 * 引数のアカウント情報取得
+	 * 引数(アカウントID）のアカウント情報取得
 	 */
 	public Account findById(String accountid) {
 		Account account = impl.findById(accountid);
+		return account;
+	}
+
+	/*
+	 * 引数(アカウント名)のアカウント情報取得
+	 */
+
+	public Account findByAccountname(String accountname) {
+		Account account = impl.findByAccountname(accountname);
 		return account;
 	}
 

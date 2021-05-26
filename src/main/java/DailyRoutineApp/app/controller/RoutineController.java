@@ -68,6 +68,7 @@ public class RoutineController {
 		mav.setViewName("card");
 		List<D_Routine> list = d_service.findAll();
 		mav.addObject("list", list);
+		mav.addObject("title", "Routine一覧");
 		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
 			mav.addObject("msg", session.getAttribute("msg"));
 			session.removeAttribute("msg");						//---msgのセッション削除
@@ -84,10 +85,7 @@ public class RoutineController {
 		Account account = acService.findById("admin");
 		List<D_Routine> list = d_service.findAllByAccountId(account);
 		mav.addObject("list", list);
-		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
-			mav.addObject("msg", session.getAttribute("msg"));
-			session.removeAttribute("msg");						//---msgのセッション削除
-		}
+		mav.addObject("title", "MyRoutine一覧");
 		return mav;
 	}
 
@@ -95,9 +93,13 @@ public class RoutineController {
 	 * RoutineIndex画面にて、作成者のボタンを押した際、
 	 * その作成者のルーティン一覧を取得し表示（カード）
 	 */
-	@RequestMapping(value="/routine/index/{routinename}",method=RequestMethod.GET)
+	@RequestMapping(value="/routine/index/{accountname}",method=RequestMethod.GET)
 	public ModelAndView routineIndexByAccountname(@PathVariable("accountname")String accountname,ModelAndView mav) {
 		mav.setViewName("card");
+		Account account = acService.findByAccountname(accountname);
+		List<D_Routine> list = d_service.findAllByAccountId(account);
+		mav.addObject("list", list);
+		mav.addObject("title", accountname+"さんのRoutine一覧");
 		return mav;
 	}
 
@@ -112,6 +114,7 @@ public class RoutineController {
 		d_service.update(routine);
 		List<D_Routine> list = d_service.findAll();
 		mav.addObject("list", list);
+		mav.addObject("title", "Routine一覧");
 		mav.addObject("msg", "いいね！ しました。");
 		mav.setViewName("card");
 		return mav;
