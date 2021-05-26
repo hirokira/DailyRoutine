@@ -90,7 +90,7 @@ public class AccountController {
 								BindingResult result,ModelAndView mav) {
 		ModelAndView res = null;
 		List<String> msgList = new ArrayList<String>();
-		//---バリデーションエラーがない かつ 『アカウントID』、『アカウント名』が未登録時の処理
+		//---バリデーションエラーがない かつ 『アカウントID』、『アカウント表示名』が未登録時の処理
 		if(!result.hasErrors() && acComponent.acIdCheck(account) && acComponent.acNameCheck(account)) {
 			acService.insert(account);								//---インサート処理
 			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
@@ -137,12 +137,12 @@ public class AccountController {
 		ModelAndView res = null;
 		List<String> msgList = new ArrayList<String>();
 
-		//---バリデーションエラーがない かつ 『アカウント名』が未登録　または　フォーム入力アカウント名が未更新 かつ　
+		//---バリデーションエラーがない かつ 『アカウント表示名』が未登録　または　フォーム入力アカウント名が未更新 かつ　
 		//---入力したパスワードとアカウントIDのパスワードが一致した時の処理
 		if(!result.hasErrors() && (acComponent.acNameCheck(account) || acComponent.acNameUpdateCheck(account))
 				&& acComponent.passwordCheck(account.getAccountid(), pass)) {
 			acService.update(account); 										//---アカウント情報更新処理
-			res = new ModelAndView("redirect:/top");							//---Viewをセット
+			res = new ModelAndView("redirect:/routine/top");							//---Viewをセット
 			session.setAttribute("msg", "アカウント情報の更新が完了しました。");//---セッションに完了メッセージ登録
 		}else {
 			mav.setViewName("/account/acEdit");								//---VIEWをセット

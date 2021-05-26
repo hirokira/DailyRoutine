@@ -52,7 +52,7 @@ public class AccountComponent {
 	 */
 	public String acIdCheckMsg(Account ac) {
 		if(acIdCheck(ac)==false) {
-			return "アカウントIDは既に使用済みです。";
+			return "アカウントIDは既に使用されています。";
 		}else {
 			return null;
 		}
@@ -63,7 +63,7 @@ public class AccountComponent {
 	 */
 	public String acNameCheckMsg(Account ac) {
 		if(acNameCheck(ac)==false) {
-			return "アカウント名は既に使用済みです。";
+			return "アカウント表示名は既に使用されています。";
 		}else {
 			return null;
 		}

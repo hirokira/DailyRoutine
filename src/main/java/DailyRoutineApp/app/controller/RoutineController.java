@@ -49,7 +49,7 @@ public class RoutineController {
 	 * Routine一覧表示
 	 */
 	@RequestMapping(value="/routine/index2",method=RequestMethod.GET)
-	public ModelAndView routineIndex(ModelAndView mav) {
+	public ModelAndView routineIndex2(ModelAndView mav) {
 		List<D_Routine> list = d_service.findAll();
 		mav.addObject("list", list);
 		mav.setViewName("/routine/routineIndex");
@@ -64,7 +64,7 @@ public class RoutineController {
 	 * Routine一覧表示(カード)
 	 */
 	@RequestMapping(value="/routine/index",method=RequestMethod.GET)
-	public ModelAndView card(ModelAndView mav) {
+	public ModelAndView routineIndex(ModelAndView mav) {
 		mav.setViewName("card");
 		List<D_Routine> list = d_service.findAll();
 		mav.addObject("list", list);
@@ -72,6 +72,32 @@ public class RoutineController {
 			mav.addObject("msg", session.getAttribute("msg"));
 			session.removeAttribute("msg");						//---msgのセッション削除
 		}
+		return mav;
+	}
+
+	/*
+	 * ログインユーザーのRoutine一覧表示(カード）,TOP画面
+	 */
+	@RequestMapping(value="/routine/top",method=RequestMethod.GET)
+	public ModelAndView routineTop(ModelAndView mav) {
+		mav.setViewName("card");
+		Account account = acService.findById("admin");
+		List<D_Routine> list = d_service.findAllByAccountId(account);
+		mav.addObject("list", list);
+		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
+			mav.addObject("msg", session.getAttribute("msg"));
+			session.removeAttribute("msg");						//---msgのセッション削除
+		}
+		return mav;
+	}
+
+	/*
+	 * RoutineIndex画面にて、作成者のボタンを押した際、
+	 * その作成者のルーティン一覧を取得し表示（カード）
+	 */
+	@RequestMapping(value="/routine/index/{routinename}",method=RequestMethod.GET)
+	public ModelAndView routineIndexByAccountname(@PathVariable("accountname")String accountname,ModelAndView mav) {
+		mav.setViewName("card");
 		return mav;
 	}
 
@@ -125,7 +151,7 @@ public class RoutineController {
 			BindingResult result,ModelAndView mav) {
 		System.out.println(routine);
 		if(!result.hasErrors()) {
-			Account account = acService.findById("admin");
+			Account account = acService.findById("hiro");
 			routine.setAccount(account);
 			d_service.insert(routine);
 			mav.setViewName("/routine/routineSuccess");

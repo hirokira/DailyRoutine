@@ -77,6 +77,18 @@ public class AccountDaoImpl implements AccountDao{
 	}
 
 	/*
+	 * 引数のアカウント名のオブジェクトを取得する
+	 */
+	@Override
+	public Account findByAccountname(String accountname) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		String sql = "from Account where accountname = :str";
+		Account account = em.createQuery(sql, Account.class).setParameter("str", accountname).getSingleResult();
+		return account;
+	}
+
+
+	/*
 	 * 引数のアカウントの更新処理
 	 */
 	@Override
@@ -93,5 +105,6 @@ public class AccountDaoImpl implements AccountDao{
 		String sql = "DELETE FROM ACCOUNT WHERE accountid = ?";
 		jdbc.update(sql, accountid);
 	}
+
 
 }

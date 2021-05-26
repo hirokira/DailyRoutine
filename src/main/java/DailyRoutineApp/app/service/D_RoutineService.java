@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import DailyRoutineApp.app.daoImpl.D_RoutineDaoImpl;
+import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.entity.D_Routine;
 import DailyRoutineApp.app.entity.Routine_Detail;
 
@@ -44,6 +45,13 @@ public class D_RoutineService {
 	 */
 	public List<D_Routine> findAll(){
 		return impl.findAll();
+	}
+
+	/*
+	 * 指定アカウントのルーティンタイトル一覧を取得
+	 */
+	public List<D_Routine> findAllByAccountId(Account account){
+		return impl.findAllByAccountId(account);
 	}
 
 	/*

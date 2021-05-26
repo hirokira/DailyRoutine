@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.entity.D_Routine;
 
 public interface D_RoutineDao {
@@ -16,6 +17,8 @@ public interface D_RoutineDao {
 
 	public D_Routine findById(Integer routineid) throws DataAccessException;//---ルーティンをroutineIdから取得
 
-	public List<D_Routine> findAll()throws DataAccessException;
+	public List<D_Routine> findAll()throws DataAccessException;		//---ルーティン一覧を取得
+
+	public List<D_Routine> findAllByAccountId(Account account)throws DataAccessException;	//---指定アカウントのルーティン一覧を取得
 
 }

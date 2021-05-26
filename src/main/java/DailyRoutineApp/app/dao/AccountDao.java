@@ -18,6 +18,8 @@ public interface AccountDao {
 
 	public Account findById(String accountid) throws DataAccessException;
 
+	public Account findByAccountname(String accountname) throws DataAccessException;
+
 	public void update(Account ac) throws DataAccessException;
 
 	public void delete(String accountid) throws DataAccessException;

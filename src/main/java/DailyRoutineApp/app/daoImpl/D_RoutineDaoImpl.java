@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import DailyRoutineApp.app.dao.D_RoutineDao;
+import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.entity.D_Routine;
 
 @Repository
@@ -57,6 +58,14 @@ public class D_RoutineDaoImpl implements D_RoutineDao{
 	public List<D_Routine> findAll() throws DataAccessException {
 		// TODO 自動生成されたメソッド・スタブ
 		List<D_Routine> list = em.createQuery("from D_Routine order by currenttime DESC, routineid", D_Routine.class).getResultList();
+		return list;
+	}
+
+	@Override
+	public List<D_Routine> findAllByAccountId(Account account) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		List<D_Routine> list =em.createQuery("from D_Routine where account_accountid = :id order by currenttime DESC",D_Routine.class)
+				.setParameter("id", account.getAccountid()).getResultList();
 		return list;
 	}
 

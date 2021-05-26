@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<!-- thymeleafを使うため以下を記述する。以後はth:xxxとすればthymeleafのメソッドが使用可能。 -->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -19,7 +20,7 @@
 			<h5 class="card-title pt-2" th:text="${list.title}">Card title</h5>
 		</div>
 		  	<div class="card-body">
-			    <h5 class="card-subtitle text-muted text-right" th:text="|作成者：${list.account.accountname}|"></h5>
+			    <h5 class="card-subtitle text-right "><a class="btn btn-secondary rounded-pill" th:href="@{/routine/index/{accountname}(accountname=${list.account.accountname})}" th:text="|作成者：${list.account.accountname}|"></a></h5>
 			    <p class="card-text text-right text-danger mb-3" th:text="|♥：${list.nicepnt}|"></p>
 			    <p class="card-text mb-4" th:text="|内容：${list.description} ...|"></p>
 
@@ -27,7 +28,7 @@
 			    <br/><br/>
 			    <form th:action="@{/routine/index}" method=post>
 					<input type="hidden" name="routineid" th:value="${list.routineid}" />
-					<input type="submit" value=" ♥イイネ！"  class="btn btn-outline-danger btn-sm mb-2"/>
+					<input type="submit" value=" ♥イイネ！"  class="btn btn-outline-danger btn-sm rounded-pill mb-2"/>
 				</form>
 			 </div>
 	  </div>
