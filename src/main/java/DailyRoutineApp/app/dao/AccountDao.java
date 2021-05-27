@@ -3,6 +3,8 @@ package DailyRoutineApp.app.dao;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import DailyRoutineApp.app.entity.Account;
 
@@ -24,4 +26,5 @@ public interface AccountDao {
 
 	public void delete(String accountid) throws DataAccessException;
 
+	public Page<Account> acAll(Pageable pageable) throws DataAccessException;
 }

@@ -7,6 +7,9 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -104,6 +107,20 @@ public class AccountDaoImpl implements AccountDao{
 	public void delete(String accountid) throws DataAccessException {
 		String sql = "DELETE FROM ACCOUNT WHERE accountid = ?";
 		jdbc.update(sql, accountid);
+	}
+
+	/*
+	 * アカウント情報一覧取得(ページネーションを実装）
+	 */
+	@Override
+	public Page<Account> acAll(Pageable pageable) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		int acListSize = acAll().size();
+		List<Account> acList = em.createQuery("from Account", Account.class)
+								.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
+
+		Page<Account> pageList = new PageImpl<Account>(acList,pageable, acListSize);
+		return pageList;
 	}
 
 

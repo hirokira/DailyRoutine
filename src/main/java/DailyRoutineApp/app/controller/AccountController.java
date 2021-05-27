@@ -6,8 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,28 +44,45 @@ public class AccountController {
 	@Autowired
 	private HttpSession session;
 
-	@RequestMapping(value="/test",method = RequestMethod.GET)
-	public String test(Model model) {
-		sv.svAdmin("admin","admin","管理者");
-		sv.svUser("hiro", "1234","ヒロ");
-//		sv.svItem("ピーマン", 98);
-		return "top";
-	}
+//	@RequestMapping(value="/test",method = RequestMethod.GET)
+//	public String test(Model model) {
+//		sv.svAdmin("admin","admin","管理者");
+//		sv.svUser("hiro", "1234","ヒロ");
+////		sv.svItem("ピーマン", 98);
+//		return "top";
+//	}
 
-	@RequestMapping(value="/top",method =RequestMethod.GET)
-	public ModelAndView top(ModelAndView mav) {
-		mav.setViewName("top");
-		return mav;
-	}
+//	@RequestMapping(value="/top",method =RequestMethod.GET)
+//	public ModelAndView top(ModelAndView mav) {
+//		mav.setViewName("top");
+//		return mav;
+//	}
 
 	/*
 	 * アカウント一覧表示画面
 	 */
-	@RequestMapping(value="/account/index",method = RequestMethod.GET)
+	@RequestMapping(value="/account/index2",method = RequestMethod.GET)
 	public ModelAndView acIndex(ModelAndView mav) {
 		mav.setViewName("/account/acIndex");
 		List<Account> list = acService.acAll();
 		mav.addObject("list", list);
+		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
+			mav.addObject("msg", session.getAttribute("msg"));
+			session.removeAttribute("msg");						//---msgのセッション削除
+		}
+		return mav;
+	}
+
+	/*
+	 * ページネーションを実装したアカウント一覧表示画面
+	 */
+	@RequestMapping(value="/account/index",method=RequestMethod.GET)
+	public ModelAndView acIndexPage(ModelAndView mav,@PageableDefault(page=0,size=10)Pageable pageable) {
+		mav.setViewName("/account/acIndex");
+		Page<Account> list = impl.acAll(pageable);
+		mav.addObject("page", list);
+		mav.addObject("list", list.getContent());
+		mav.addObject("url", "/account/index");
 		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
 			mav.addObject("msg", session.getAttribute("msg"));
 			session.removeAttribute("msg");						//---msgのセッション削除
