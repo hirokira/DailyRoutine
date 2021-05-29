@@ -78,43 +78,35 @@
 	</div>
 
 	<!-- 以降がページネーション部分 -->
-<div>
+
+	<nav aria-label="Page navigation" th:fragment="pagenation">
+	  <ul class="pagination pagination-lg justify-content-center ">
+	    <li th:if="${page.first}" style="display:inline;" class="page-item disabled">
+	      <span class="page-link">&lt;&lt;前</span>
+	    </li>
+	    <li th:if="${!page.first}" style="display:inline;" class="page-item">
+	      <a class="page-link page-item" th:href="@{''(page = ${page.number} - 1)} "> &lt;&lt;前 </a>
+	    </li>
 
 
-  <ul>
-    <li style="display:inline;">
-      <span th:if="${page.first}">&lt;&lt;前</span>
-      <a
-        th:if="${!page.first}"
-        th:href="@{${url}(page = ${page.number} - 1)}"
-      >
-        &lt;&lt;前
-      </a>
-    </li>
-    <li  th:if="${list.size!=0}"
-      th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-      style="display:inline; margin-left:10px;"
-    >
-      <span th:if="${i} == ${page.number}" th:text="${i + 1}">1</span>
-      <a
-        th:if="${i} != ${page.number}"
-        th:href="@{${url}(page = ${i})}"
-      >
-        <span th:text="${i+1}">1</span>
-      </a>
-    </li>
-    <li style="display:inline; margin-left:10px;">
-      <span th:if="${page.last}">次&gt;&gt;</span>
-      <a
-        th:if="${!page.last}"
-        th:href="@{${url}(page = (${page.number} + 1))}"
-      >
-      <!-- th:href="@{${url}(page = (${page.number} + 1))}" -->
-        次&gt;&gt;
-      </a>
-    </li>
-  </ul>
-</div>
+	    <li  th:if="${list.size!=0}"
+	      th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" style="display:inline; margin-left:10px;" class="page-item"
+	    >
+	      <span th:if="${i} == ${page.number}" th:text="${i + 1}" class="page-link">1</span>
+	      <a class="page-link" th:if="${i} != ${page.number}"  th:href="@{''(page = ${i})}">
+	        <span th:text="${i+1}" >1</span>
+	      </a>
+	    </li>
+
+
+	    <li th:if="${page.last}" style="display:inline; margin-left:10px;" class="page-item disabled">
+	      <span class="page-link">次&gt;&gt;</span>
+	    </li>
+	    <li th:if="${!page.last}" style="display:inline; margin-left:10px;" class="page-item">
+	      <a class="page-link" th:href="@{''(page = (${page.number} + 1))}">次&gt;&gt;</a>
+	    </li>
+	  </ul>
+	</nav>
 </section>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

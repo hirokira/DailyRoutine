@@ -3,6 +3,8 @@ package DailyRoutineApp.app.dao;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.entity.D_Routine;
@@ -20,5 +22,10 @@ public interface D_RoutineDao {
 	public List<D_Routine> findAll()throws DataAccessException;		//---ルーティン一覧を取得
 
 	public List<D_Routine> findAllByAccountId(Account account)throws DataAccessException;	//---指定アカウントのルーティン一覧を取得
+
+	public Page<D_Routine> findAll(Pageable pageable) throws DataAccessException;		//---ルーティン一覧取得（ページネーション）
+
+	public Page<D_Routine> findAllByAccountId(Pageable pageable,Account account)throws DataAccessException;	//---指定アカウントのルーティン一覧取得(ページネーション)
+
 
 }

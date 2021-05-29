@@ -7,6 +7,9 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -67,6 +70,28 @@ public class D_RoutineDaoImpl implements D_RoutineDao{
 		List<D_Routine> list =em.createQuery("from D_Routine where account_accountid = :id order by currenttime DESC",D_Routine.class)
 				.setParameter("id", account.getAccountid()).getResultList();
 		return list;
+	}
+
+	@Override
+	public Page<D_Routine> findAll(Pageable pageable) throws DataAccessException {
+		// TODO 自動生成されたメソッド・スタブ
+		int routineListSize = findAll().size();
+
+		List<D_Routine> list = em.createQuery("from D_Routine order by currenttime DESC", D_Routine.class)
+								.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
+		Page<D_Routine> pageList = new PageImpl<D_Routine>(list,pageable,routineListSize);
+		return pageList;
+	}
+
+	@Override
+	public Page<D_Routine> findAllByAccountId(Pageable pageable, Account account) throws DataAccessException {
+		int routineListSize = findAllByAccountId(account).size();
+
+		List<D_Routine> list = em.createQuery("from D_Routine where account_accountid = :id order by currenttime DESC", D_Routine.class)
+								.setParameter("id", account.getAccountid()).setFirstResult((int) pageable.getOffset())
+								.setMaxResults(pageable.getPageSize()).getResultList();
+		Page<D_Routine> pageList = new PageImpl<D_Routine>(list,pageable,routineListSize);
+		return pageList;
 	}
 
 

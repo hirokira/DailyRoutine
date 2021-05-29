@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,10 +50,24 @@ public class D_RoutineService {
 	}
 
 	/*
+	 * ルーティンタイトル一覧を取得（ページネーション実装)
+	 */
+	public Page<D_Routine> findAll(Pageable pageable){
+		return impl.findAll(pageable);
+	}
+
+	/*
 	 * 指定アカウントのルーティンタイトル一覧を取得
 	 */
 	public List<D_Routine> findAllByAccountId(Account account){
 		return impl.findAllByAccountId(account);
+	}
+
+	/*
+	 * 指定アカウントのルーティンタイトル一覧取得（ページネーション実装）
+	 */
+	public Page<D_Routine> findAllByAccountId(Pageable pageable,Account account){
+		return impl.findAllByAccountId(pageable, account);
 	}
 
 	/*

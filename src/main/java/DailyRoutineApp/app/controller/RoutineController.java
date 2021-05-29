@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -46,28 +49,14 @@ public class RoutineController {
 	private HttpSession session;
 
 	/*
-	 * Routine一覧表示
-	 */
-	@RequestMapping(value="/routine/index2",method=RequestMethod.GET)
-	public ModelAndView routineIndex2(ModelAndView mav) {
-		List<D_Routine> list = d_service.findAll();
-		mav.addObject("list", list);
-		mav.setViewName("/routine/routineIndex");
-		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
-			mav.addObject("msg", session.getAttribute("msg"));
-			session.removeAttribute("msg");						//---msgのセッション削除
-		}
-		return mav;
-	}
-
-	/*
-	 * Routine一覧表示(カード)
+	 * Routine一覧表示(カード＆ページネーション）
 	 */
 	@RequestMapping(value="/routine/index",method=RequestMethod.GET)
-	public ModelAndView routineIndex(ModelAndView mav) {
+	public ModelAndView routineIndex(ModelAndView mav,@PageableDefault(page=0,size=9)Pageable pageable) {
 		mav.setViewName("card");
-		List<D_Routine> list = d_service.findAll();
-		mav.addObject("list", list);
+		Page<D_Routine> list = d_service.findAll(pageable);
+		mav.addObject("page", list);
+		mav.addObject("list", list.getContent());
 		mav.addObject("title", "Routine一覧");
 		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
 			mav.addObject("msg", session.getAttribute("msg"));
@@ -77,43 +66,47 @@ public class RoutineController {
 	}
 
 	/*
-	 * ログインユーザーのRoutine一覧表示(カード）,TOP画面
+	 * ログインユーザーのRoutine一覧表示（カード＆ページネーション)/TOP画面
 	 */
 	@RequestMapping(value="/routine/top",method=RequestMethod.GET)
-	public ModelAndView routineTop(ModelAndView mav) {
+	public ModelAndView routineTop(ModelAndView mav,@PageableDefault(page=0,size=9)Pageable pageable) {
 		mav.setViewName("card");
 		Account account = acService.findById("admin");
-		List<D_Routine> list = d_service.findAllByAccountId(account);
-		mav.addObject("list", list);
+		Page<D_Routine> list = d_service.findAllByAccountId(pageable, account);
+		mav.addObject("page",list);
+		mav.addObject("list", list.getContent());
 		mav.addObject("title", "MyRoutine一覧");
 		return mav;
 	}
 
 	/*
 	 * RoutineIndex画面にて、作成者のボタンを押した際、
-	 * その作成者のルーティン一覧を取得し表示（カード）
+	 * その作成者のルーティン一覧を取得し表示（カード）(ページネーション）
 	 */
 	@RequestMapping(value="/routine/index/{accountname}",method=RequestMethod.GET)
-	public ModelAndView routineIndexByAccountname(@PathVariable("accountname")String accountname,ModelAndView mav) {
+	public ModelAndView routineIndexByAccountname(@PathVariable("accountname")String accountname,ModelAndView mav,
+													@PageableDefault(page=0,size=9)Pageable pageable) {
 		mav.setViewName("card");
 		Account account = acService.findByAccountname(accountname);
-		List<D_Routine> list = d_service.findAllByAccountId(account);
-		mav.addObject("list", list);
+		Page<D_Routine> list = d_service.findAllByAccountId(pageable, account);
+		mav.addObject("page",list);
+		mav.addObject("list", list.getContent());
 		mav.addObject("title", accountname+"さんのRoutine一覧");
 		return mav;
 	}
 
-
 	/*
-	 * イイネ押下時の処理(カードでRoutine一覧表示)
+	 * イイネ押下時の処理(カードでRoutine一覧表示)(ページネーション）
 	 */
 	@RequestMapping(value="/routine/index",method=RequestMethod.POST)
-	public ModelAndView routineIndexCardPost(@RequestParam("routineid")Integer id,ModelAndView mav) {
+	public ModelAndView routineIndexCardPost(@RequestParam("routineid")Integer id,ModelAndView mav,
+											@PageableDefault(page=0,size=9)Pageable pageable) {
 		D_Routine routine = d_service.findById(id);
 		routine.setNicepnt(component.nicePntAdd(routine));
 		d_service.update(routine);
-		List<D_Routine> list = d_service.findAll();
-		mav.addObject("list", list);
+		Page<D_Routine> list = d_service.findAll(pageable);
+		mav.addObject("page",list);
+		mav.addObject("list", list.getContent());
 		mav.addObject("title", "Routine一覧");
 		mav.addObject("msg", "いいね！ しました。");
 		mav.setViewName("card");
@@ -121,19 +114,21 @@ public class RoutineController {
 	}
 
 	/*
-	 * イイネ押下時の処理(Routine一覧表示)
+	 * イイネ押下時の処理(カードでRoutine一覧表示)
+	 * 　2021/05/30 Add：ページネーション実装メソッド作成に伴い、削除
 	 */
-	@RequestMapping(value="/routine/index2",method=RequestMethod.POST)
-	public ModelAndView routineIndexPost(@RequestParam("routineid")Integer id,ModelAndView mav) {
-		D_Routine routine = d_service.findById(id);
-		routine.setNicepnt(component.nicePntAdd(routine));
-		d_service.update(routine);
-		List<D_Routine> list = d_service.findAll();
-		mav.addObject("list", list);
-		mav.addObject("msg", "いいね！ しました。");
-		mav.setViewName("/routine/routineIndex");
-		return mav;
-	}
+//	@RequestMapping(value="/routine/index2",method=RequestMethod.POST)
+//	public ModelAndView routineIndexCardPost2(@RequestParam("routineid")Integer id,ModelAndView mav) {
+//		D_Routine routine = d_service.findById(id);
+//		routine.setNicepnt(component.nicePntAdd(routine));
+//		d_service.update(routine);
+//		List<D_Routine> list = d_service.findAll();
+//		mav.addObject("list", list);
+//		mav.addObject("title", "Routine一覧");
+//		mav.addObject("msg", "いいね！ しました。");
+//		mav.setViewName("card");
+//		return mav;
+//	}
 
 	/*
 	 * 新規Routine登録画面

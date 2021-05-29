@@ -82,7 +82,7 @@ public class AccountController {
 		Page<Account> list = impl.acAll(pageable);
 		mav.addObject("page", list);
 		mav.addObject("list", list.getContent());
-		mav.addObject("url", "/account/index");
+//		mav.addObject("url", "/account/index");
 		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
 			mav.addObject("msg", session.getAttribute("msg"));
 			session.removeAttribute("msg");						//---msgのセッション削除
