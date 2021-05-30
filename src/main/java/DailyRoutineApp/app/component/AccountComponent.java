@@ -21,6 +21,7 @@ public class AccountComponent {
 	@Autowired
 	private AccountService acService;
 
+
 	/*
 	 * 入力したアカウントIdの重複チェックロジック
 	 * 　　false：既に登録済み

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +27,7 @@ import DailyRoutineApp.app.daoImpl.RoutineDetailDaoImpl;
 import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.entity.D_Routine;
 import DailyRoutineApp.app.entity.Routine_Detail;
+import DailyRoutineApp.app.entity.UserAccount;
 import DailyRoutineApp.app.service.AccountService;
 import DailyRoutineApp.app.service.D_RoutineService;
 
@@ -58,6 +62,21 @@ public class RoutineController {
 		mav.addObject("page", list);
 		mav.addObject("list", list.getContent());
 		mav.addObject("title", "Routine一覧");
+
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+      //---UserAccountがログインユーザーの UserDetailsと同じもしくは子クラスかをチェック。
+        UserAccount user=null;
+    	if(authentication.getPrincipal() instanceof UserAccount) {
+    		user = UserAccount.class.cast(authentication.getPrincipal());
+    		mav.addObject("userInfo","現在ログインしているユーザー名："+user.getUsername());
+    	}else {
+    		mav.addObject("userInfo", "");
+    	}
+		Account account = acService.findById(user.getUsername());
+		session.setAttribute("account", account);
+		mav.addObject("account",session.getAttribute("account"));
+
 		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
 			mav.addObject("msg", session.getAttribute("msg"));
 			session.removeAttribute("msg");						//---msgのセッション削除
@@ -71,7 +90,28 @@ public class RoutineController {
 	@RequestMapping(value="/routine/top",method=RequestMethod.GET)
 	public ModelAndView routineTop(ModelAndView mav,@PageableDefault(page=0,size=9)Pageable pageable) {
 		mav.setViewName("card");
-		Account account = acService.findById("admin");
+
+    	//---現在のリクエストに紐づく Authentication を取得するには
+    	//    	SecurityContextHolder.getContext().getAuthentication() とする。
+    	//    	SecurityContextHolder.getContext() は、現在のリクエストに紐づく SecurityContext を返している。
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      //Authentication.getAuthorities() で、現在のログインユーザーに付与されている権限（GrantedAuthority のコレクション）を取得できる。
+        System.out.println("  " + authentication.getAuthorities());
+
+        //---Authentication.getPrincipal() で、ログインユーザーの UserDetails を取得できる。
+        UserDetails principal = (UserDetails)authentication.getPrincipal();
+
+      //---UserAccountがログインユーザーの UserDetailsと同じもしくは子クラスかをチェック。
+        UserAccount user=null;
+    	if(authentication.getPrincipal() instanceof UserAccount) {
+    		user = UserAccount.class.cast(authentication.getPrincipal());
+    		mav.addObject("userInfo","現在ログインしているユーザー名："+user.getUsername());
+    	}else {
+    		mav.addObject("userInfo", "");
+    	}
+		Account account = acService.findById(user.getUsername());
+		session.setAttribute("account", account);
+		mav.addObject("account",session.getAttribute("account"));
 		Page<D_Routine> list = d_service.findAllByAccountId(pageable, account);
 		mav.addObject("page",list);
 		mav.addObject("list", list.getContent());
@@ -89,6 +129,7 @@ public class RoutineController {
 		mav.setViewName("card");
 		Account account = acService.findByAccountname(accountname);
 		Page<D_Routine> list = d_service.findAllByAccountId(pageable, account);
+
 		mav.addObject("page",list);
 		mav.addObject("list", list.getContent());
 		mav.addObject("title", accountname+"さんのRoutine一覧");

@@ -16,6 +16,7 @@ public class AccountService {
 	@Autowired
 	private AccountDaoImpl impl;
 
+
 	/*
 	 * アカウント一覧取得
 	 */
