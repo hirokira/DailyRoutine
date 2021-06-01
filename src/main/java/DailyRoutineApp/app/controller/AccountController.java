@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import DailyRoutineApp.app.component.AccountComponent;
 import DailyRoutineApp.app.daoImpl.AccountDaoImpl;
 import DailyRoutineApp.app.entity.Account;
+import DailyRoutineApp.app.service.AccountLogicService;
 import DailyRoutineApp.app.service.AccountService;
 import DailyRoutineApp.app.service.TestService;
 
@@ -36,7 +36,7 @@ public class AccountController {
 	private AccountService acService;
 
 	@Autowired
-	private AccountComponent acComponent;
+	private AccountLogicService acLogicService;
 
 	@Autowired
 	private TestService sv;
@@ -46,8 +46,8 @@ public class AccountController {
 
 //	@RequestMapping(value="/test",method = RequestMethod.GET)
 //	public String test(Model model) {
-//		sv.svAdmin("admin","admin","管理者");
-//		sv.svUser("hiro", "1234","ヒロ");
+//		sv.svAdmin("dbadmin","dbpass","dbadmin");
+//		sv.svUser("hiro","1234","ヒロ");
 ////		sv.svItem("ピーマン", 98);
 //		return "top";
 //	}
@@ -110,15 +110,15 @@ public class AccountController {
 		ModelAndView res = null;
 		List<String> msgList = new ArrayList<String>();
 		//---バリデーションエラーがない かつ 『アカウントID』、『アカウント表示名』が未登録時の処理
-		if(!result.hasErrors() && acComponent.acIdCheck(account) && acComponent.acNameCheck(account)) {
-			acService.insert(account);								//---インサート処理
+		if(!result.hasErrors() && acLogicService.acIdCheck(account) && acLogicService.acNameCheck(account)) {
+			acService.accountSave(account);								//---インサート処理
 			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
 			res = new ModelAndView("redirect:/account/index");				//---リダイレクト
 		}else {														//---入力不備などがあった場合の処理
 			mav.setViewName("/account/acNew");
 			mav.addObject("formModel", account);
 			mav.addObject("result", result);
-			msgList = acComponent.acCheckMsg(account);				//---アカウントID、アカウント名が重複時のメッセージをリストに追加するメソッド
+			msgList = acLogicService.acCheckMsg(account);				//---アカウントID、アカウント名が重複時のメッセージをリストに追加するメソッド
 			mav.addObject("msgList", msgList);
 			res = mav;
 		}
@@ -158,16 +158,16 @@ public class AccountController {
 
 		//---バリデーションエラーがない かつ 『アカウント表示名』が未登録　または　フォーム入力アカウント名が未更新 かつ　
 		//---入力したパスワードとアカウントIDのパスワードが一致した時の処理
-		if(!result.hasErrors() && (acComponent.acNameCheck(account) || acComponent.acNameUpdateCheck(account))
-				&& acComponent.passwordCheck(account.getAccountid(), pass)) {
-			acService.update(account); 										//---アカウント情報更新処理
+		if(!result.hasErrors() && (acLogicService.acNameCheck(account) || acLogicService.acNameUpdateCheck(account))
+				&& acLogicService.passwordCheck(account.getAccountid(), pass)) {
+			acService.updateAccount(account); 										//---アカウント情報更新処理
 			res = new ModelAndView("redirect:/routine/top");							//---Viewをセット
 			session.setAttribute("msg", "アカウント情報の更新が完了しました。");//---セッションに完了メッセージ登録
 		}else {
 			mav.setViewName("/account/acEdit");								//---VIEWをセット
 			mav.addObject("formModel", account);							//---Modelを追加
 			mav.addObject("result", result);								//---バリデーション結果のエラーを設置
-			mav.addObject("msgList", acComponent.acUpdateCheckMsg(account,account.getAccountid(),pass));
+			mav.addObject("msgList", acLogicService.acUpdateCheckMsg(account,account.getAccountid(),pass));
 			res = mav;
 		}
 		return res;

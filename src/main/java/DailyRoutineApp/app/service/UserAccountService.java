@@ -31,7 +31,7 @@ public class UserAccountService implements UserDetailsService{
 	            throw new UsernameNotFoundException("Username is empty");
 	        }
 
-	        Account ac = repository.findByAccountname(username);
+	        Account ac = repository.findById(username);
 	        if (ac == null) {
 	            throw new UsernameNotFoundException("User not found: " + username);
 	        }

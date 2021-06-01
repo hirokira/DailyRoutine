@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity web)throws Exception{
 
 		web.formLogin().loginPage("/login").defaultSuccessUrl("/routine/top").failureUrl("/login-error").permitAll();
-		web.authorizeRequests().antMatchers("/css/**", "/images/**", "/js/**","/user/new","/user/create").permitAll().anyRequest().authenticated();
+		web.authorizeRequests().antMatchers("/css/**", "/images/**", "/js/**","/account/new","/account/create").permitAll().anyRequest().authenticated();
 		web.logout().logoutSuccessUrl("/login").permitAll();
 	}
 
@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 
 	@Bean
-	PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
 

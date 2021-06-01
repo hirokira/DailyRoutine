@@ -3,6 +3,7 @@ package DailyRoutineApp.app.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ public class AccountService {
 
 	@Autowired
 	private AccountDaoImpl impl;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 	/*
@@ -72,5 +76,35 @@ public class AccountService {
 	public Integer acCount(Account ac) {
 		Integer count =impl.acIdCheck(ac);
 		return count;
+	}
+
+	//---AccountをDBに登録。(adminかUserでそれぞれ分ける)
+	public void accountSave(Account account) {
+		account.setEnabled(true);	//---アカウントの有効化を行う。
+		account.setPassword(passwordEncoder.encode(account.getPassword()));
+		if(account.isAdmin()) {
+			svAdmin(account);
+		}else {
+			svUser(account);
+		}
+	}
+
+	@Transactional
+	public void svAdmin(Account account) {
+		account.setAdmin(true);
+		impl.insert(account);	//---jdbcTemplateでINSERT処理
+	}
+
+	@Transactional
+	public void svUser(Account account) {
+		account.setAdmin(false);
+		impl.insert(account);
+	}
+
+	//---アカウント情報更新
+	@Transactional
+	public void updateAccount(Account account) {
+		account.setPassword(passwordEncoder.encode(account.getPassword()));
+		impl.update(account);
 	}
 }

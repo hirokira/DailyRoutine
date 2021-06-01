@@ -73,7 +73,7 @@ public class RoutineController {
     	}else {
     		mav.addObject("userInfo", "");
     	}
-		Account account = acService.findById(user.getUsername());
+		Account account = acService.findByAccountname(user.getUsername());
 		session.setAttribute("account", account);
 		mav.addObject("account",session.getAttribute("account"));
 
@@ -109,7 +109,7 @@ public class RoutineController {
     	}else {
     		mav.addObject("userInfo", "");
     	}
-		Account account = acService.findById(user.getUsername());
+		Account account = acService.findByAccountname(user.getUsername());
 		session.setAttribute("account", account);
 		mav.addObject("account",session.getAttribute("account"));
 		Page<D_Routine> list = d_service.findAllByAccountId(pageable, account);
@@ -190,8 +190,9 @@ public class RoutineController {
 			BindingResult result,ModelAndView mav) {
 		System.out.println(routine);
 		if(!result.hasErrors()) {
-			Account account = acService.findById("hiro");
-			routine.setAccount(account);
+			Account ac = (Account) session.getAttribute("account");
+//			Account account = acService.findById("hiro");
+			routine.setAccount(ac);
 			d_service.insert(routine);
 			mav.setViewName("/routine/routineSuccess");
 		}else {

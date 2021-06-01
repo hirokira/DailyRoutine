@@ -70,7 +70,7 @@
 
 	<form th:action="@{/content/new}" method=post>
 		<input type="hidden" name="routineid" th:value="${formModel.routineid}" />
-		<input type="submit" value="内容を追加する"  class="btn btn-outline-primary btn-lg"/>
+		<input th:if="${session.account.accountname}==${formModel.account.accountname}" type="submit" value="内容を追加する"  class="btn btn-outline-primary btn-lg"/>
 	</form>
 </section>
 
@@ -78,7 +78,9 @@
 
 	<form th:action="@{/routine/index}" method=post>
 		<input type="hidden" name="routineid" th:value="${formModel.routineid}" />
-		<input type="submit" value="♥イイネ！"  class="btn btn-outline-danger btn-lg rounded-pill"/>
+
+		<input th:if="${session.account.accountname}==${formModel.account.accountname}" type="button" value="♥イイネ！"  class="btn btn-outline-danger btn-lg rounded-pill disabled"/>
+		<input th:unless="${session.account.accountname}==${formModel.account.accountname}"  type="submit" value="♥イイネ！"  class="btn btn-outline-danger btn-lg rounded-pill"/>
 	</form>
 </section>
 
@@ -86,7 +88,7 @@
 
 	<form th:action="@{/routine/delete}" method=post>
 		<input type="hidden" name="routineid" th:value="${formModel.routineid}" />
-		<input type="submit" value="このRoutineを削除する"  class="btn btn-danger btn-lg"/>
+		<input th:if="${session.account.accountname}==${formModel.account.accountname}" type="submit" value="このRoutineを削除する"  class="btn btn-danger btn-lg"/>
 	</form>
 </section>
 

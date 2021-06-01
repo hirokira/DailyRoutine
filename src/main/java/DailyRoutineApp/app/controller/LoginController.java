@@ -23,7 +23,7 @@ public class LoginController {
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public String index(Model model) {
 
-//		sv.registerAdmin("dbadmin","dbadmin", "dbpass");
+//		sv.registerAdmin("admin","管理者", "admin");
 		model.addAttribute("iserror",false);
 		model.addAttribute("msg", session.getAttribute("msg"));
 		if(session.getAttribute("msg")!=null) {

@@ -17,6 +17,9 @@ public class TestService {
 	@Autowired
 	private AccountDaoImpl impl;
 
+	@Autowired
+	private AccountService ac;
+
 
 //	@Autowired
 //	private PasswordEncoder passwordEncoder;
@@ -24,13 +27,13 @@ public class TestService {
 	@Transactional
 	public void svAdmin(String accountId,String password,String accountName) {
 		Account user = new Account(accountId,password,accountName,true);
-		impl.insert(user);
+		ac.accountSave(user);
 	}
 
 	@Transactional
 	public void svUser(String accountId,String password,String accountName) {
 		Account user = new Account(accountId,password,accountName,false);
-		impl.insert(user);
+		ac.accountSave(user);
 	}
 
 
