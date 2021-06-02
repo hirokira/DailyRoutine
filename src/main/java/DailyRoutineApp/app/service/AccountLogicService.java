@@ -105,7 +105,7 @@ public class AccountLogicService {
 	public boolean passwordCheck(String accountid,String pass) {
 		System.out.println(impl.findById(accountid).getPassword());
 		System.out.println(passwordEncoder.encode(pass));
-		if(impl.findById(accountid).getPassword().equals(passwordEncoder.encode(pass))) {
+		if(passwordEncoder.matches(pass, impl.findById(accountid).getPassword())) {	//---
 			return true;
 		}else {
 			return false;

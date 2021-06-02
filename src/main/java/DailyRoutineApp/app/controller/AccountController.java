@@ -44,20 +44,6 @@ public class AccountController {
 	@Autowired
 	private HttpSession session;
 
-//	@RequestMapping(value="/test",method = RequestMethod.GET)
-//	public String test(Model model) {
-//		sv.svAdmin("dbadmin","dbpass","dbadmin");
-//		sv.svUser("hiro","1234","ヒロ");
-////		sv.svItem("ピーマン", 98);
-//		return "top";
-//	}
-
-//	@RequestMapping(value="/top",method =RequestMethod.GET)
-//	public ModelAndView top(ModelAndView mav) {
-//		mav.setViewName("top");
-//		return mav;
-//	}
-
 	/*
 	 * アカウント一覧表示画面
 	 */
