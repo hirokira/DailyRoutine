@@ -12,7 +12,7 @@ import DailyRoutineApp.app.daoImpl.AccountDaoImpl;
 import DailyRoutineApp.app.entity.Account;
 
 @Service
-public class AccountLogicService {
+public class AccountCheckLogicService {
 
 
 	@Autowired
@@ -98,14 +98,12 @@ public class AccountLogicService {
 	}
 
 	/*
-	 * アカウント更新時、更新するアカウントのパスワードと入力された前のパスワードが一致しているかを確認する
+	 * アカウント更新時、更新するアカウントのパスワードと入力された前のパスワードが有効(一致)しているかを確認する
 	 * 　　true：一致
 	 * 　　false：不一致
 	 */
 	public boolean passwordCheck(String accountid,String pass) {
-		System.out.println(impl.findById(accountid).getPassword());
-		System.out.println(passwordEncoder.encode(pass));
-		if(passwordEncoder.matches(pass, impl.findById(accountid).getPassword())) {	//---
+		if(passwordEncoder.matches(pass, impl.findById(accountid).getPassword())) {	//---matchesインターフェイスでPasswordEncoderメソッドを使用してパスワードが有効かどうかを確認します。
 			return true;
 		}else {
 			return false;

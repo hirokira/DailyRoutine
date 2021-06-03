@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import DailyRoutineApp.app.daoImpl.AccountDaoImpl;
 import DailyRoutineApp.app.entity.Account;
-import DailyRoutineApp.app.service.AccountLogicService;
+import DailyRoutineApp.app.entity.UserAccount;
+import DailyRoutineApp.app.service.AccountCheckLogicService;
 import DailyRoutineApp.app.service.AccountService;
 import DailyRoutineApp.app.service.TestService;
 
@@ -36,7 +39,7 @@ public class AccountController {
 	private AccountService acService;
 
 	@Autowired
-	private AccountLogicService acLogicService;
+	private AccountCheckLogicService acLogicService;
 
 	@Autowired
 	private TestService sv;
@@ -116,9 +119,15 @@ public class AccountController {
 	 */
 	@RequestMapping(value="/account/show/{accountid}",method=RequestMethod.GET)
 	public ModelAndView acShow(@PathVariable("accountid")String accountid,ModelAndView mav) {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserAccount user = UserAccount.class.cast(authentication.getPrincipal());
 		Account account = acService.findById(accountid);	//---アカウント情報取得
-		mav.addObject("formModel", account);				//---アカウント情報をViewへ送る
-		mav.setViewName("/account/acShow");
+		if(account.getAccountname().equals(user.getUsername())) {
+			mav.setViewName("/account/acShow");
+			mav.addObject("formModel", account);				//---アカウント情報をViewへ送る
+		}else {
+			mav.setViewName("error");
+		}
 		return mav;
 	}
 
@@ -127,8 +136,8 @@ public class AccountController {
 	 */
 	@RequestMapping(value="/account/edit",method=RequestMethod.POST)
 	public ModelAndView acEdit(@RequestParam("accountid")String accountid,ModelAndView mav) {
-		mav.setViewName("/account/acEdit");
 		Account account = acService.findById(accountid);	//---アカウント情報取得
+		mav.setViewName("/account/acEdit");
 		mav.addObject("formModel", account);				//---アカウント情報をViewへ送る
 		return mav;
 	}
