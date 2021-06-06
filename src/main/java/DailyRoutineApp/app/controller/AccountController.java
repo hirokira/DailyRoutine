@@ -26,7 +26,6 @@ import DailyRoutineApp.app.entity.Account;
 import DailyRoutineApp.app.entity.UserAccount;
 import DailyRoutineApp.app.service.AccountCheckLogicService;
 import DailyRoutineApp.app.service.AccountService;
-import DailyRoutineApp.app.service.TestService;
 
 @Controller
 public class AccountController {
@@ -41,8 +40,6 @@ public class AccountController {
 	@Autowired
 	private AccountCheckLogicService acLogicService;
 
-	@Autowired
-	private TestService sv;
 
 	@Autowired
 	private HttpSession session;
@@ -71,7 +68,6 @@ public class AccountController {
 		Page<Account> list = impl.acAll(pageable);
 		mav.addObject("page", list);
 		mav.addObject("list", list.getContent());
-//		mav.addObject("url", "/account/index");
 		if(session.getAttribute("msg")!=null) {					//---セッションにメッセージが登録されていればVIEWへ送り、セッションは削除する
 			mav.addObject("msg", session.getAttribute("msg"));
 			session.removeAttribute("msg");						//---msgのセッション削除
@@ -101,8 +97,8 @@ public class AccountController {
 		//---バリデーションエラーがない かつ 『アカウントID』、『アカウント表示名』が未登録時の処理
 		if(!result.hasErrors() && acLogicService.acIdCheck(account) && acLogicService.acNameCheck(account)) {
 			acService.accountSave(account);								//---インサート処理
-			session.setAttribute("msg", "登録が完了しました。");	//---セッションに完了メッセージ登録
-			res = new ModelAndView("redirect:/account/index");				//---リダイレクト
+			session.setAttribute("msg", "アカウントの登録が完了しました。");	//---セッションに完了メッセージ登録
+			res = new ModelAndView("redirect:/login");				//---リダイレクト
 		}else {														//---入力不備などがあった場合の処理
 			mav.setViewName("/account/acNew");
 			mav.addObject("formModel", account);
@@ -122,7 +118,8 @@ public class AccountController {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserAccount user = UserAccount.class.cast(authentication.getPrincipal());
 		Account account = acService.findById(accountid);	//---アカウント情報取得
-		if(account.getAccountname().equals(user.getUsername())) {
+		//---ログインユーザー名と、取得したアカウント名が一致する,または権限がADMIN,USER権限を持っている場合処理を行う。
+		if(account.getAccountname().equals(user.getUsername()) || user.getAuthorities().size()==2) {
 			mav.setViewName("/account/acShow");
 			mav.addObject("formModel", account);				//---アカウント情報をViewへ送る
 		}else {
@@ -149,8 +146,6 @@ public class AccountController {
 	public ModelAndView acUpdate(@ModelAttribute("formModel")@Validated Account account,
 								BindingResult result,@RequestParam("password_before")String pass,ModelAndView mav) {
 		ModelAndView res = null;
-		List<String> msgList = new ArrayList<String>();
-
 		//---バリデーションエラーがない かつ 『アカウント表示名』が未登録　または　フォーム入力アカウント名が未更新 かつ　
 		//---入力したパスワードとアカウントIDのパスワードが一致した時の処理
 		if(!result.hasErrors() && (acLogicService.acNameCheck(account) || acLogicService.acNameUpdateCheck(account))

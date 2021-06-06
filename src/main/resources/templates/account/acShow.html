@@ -16,9 +16,9 @@
 		<!-- <div><a th:href="@{/user/index}" href="{/user/index}">アカウント一覧へ戻る</a></div> -->
 	<div>
 		<table class="table table-striped table-bordered text-lg" th:object = "${formModel}">
-			<tr><td th:text="|アカウントID:${formModel.accountid}|"></td></tr>
-			<tr><td th:text="|アカウント表示名：${formModel.accountname}|"></td></tr>
-			<tr><td th:text="|管理者権限：${formModel.admin}|" ></td></tr>
+			<tr><td th:text="|アカウントID：　${formModel.accountid}|"></td></tr>
+			<tr><td th:text="|アカウント表示名：　${formModel.accountname}|"></td></tr>
+			<tr><td th:text="|管理者権限：　${formModel.admin}|" ></td></tr>
 			<!-- <tr><td th:if="${formModel.admin}==0" th:text="権限(ROLE)：USER"></td></tr> -->
 		</table>
 
@@ -36,8 +36,11 @@
 		<form th:action="@{/account/delete}" method="post" >
 			<input type="hidden" name="accountid" th:value="*{accountid}" />
 			<div th:if="${formModel.admin==false}">
+				<input th:if="${session.account.admin}" type="submit" th:value="|アカウントID：${formModel.accountid}を削除する|"  class="col-sm-4 btn-danger btn"/>
+<!--
 				<input type="submit" th:value="|アカウントID：${formModel.accountid}を削除する|" class="col-sm-4 btn-danger btn"/>
-			</div>
+	 -->
+	 	</div>
 		</form>
 	</div>
 </section>
